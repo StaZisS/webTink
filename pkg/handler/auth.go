@@ -23,15 +23,20 @@ func (h *Handler) signUp(c *gin.Context) {
 	})
 }
 
+type signInInput struct {
+	Email    string `json:"email" binding:"required"`
+	Password string `json:"password" binding:"required"`
+}
+
 func (h *Handler) signIn(c *gin.Context) {
-	var input listing.User
+	var input signInInput
 
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	accessToken, refreshToken, err := h.services.Authorization.GenerateToken(input.Password, input.Email)
+	accessToken, refreshToken, err := h.services.Authorization.GenerateToken(input.Email, input.Password)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
@@ -50,6 +55,7 @@ func (h *Handler) logOut(c *gin.Context) {
 	c.SetCookie("access_token", "", -1, "/", "localhost", false, true)
 	c.SetCookie("refresh_token", "", -1, "/", "localhost", false, true)
 	c.SetCookie("logged_in", "false", -1, "/", "localhost", false, true)
+
 	c.JSON(http.StatusOK, map[string]interface{}{
 		"message": "success",
 	})

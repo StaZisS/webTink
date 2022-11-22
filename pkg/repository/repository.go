@@ -12,6 +12,9 @@ type Authorization interface {
 	GetUserById(id uuid.UUID) (listing.User, error)
 }
 type Post interface {
+	Create(userId uuid.UUID, post listing.Post) (uuid.UUID, error)
+	GetAll() ([]listing.Post, error)
+	GetById(id uuid.UUID) (listing.Post, error)
 }
 type Repository struct {
 	Authorization
@@ -21,5 +24,6 @@ type Repository struct {
 func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
 		Authorization: NewAuthPostgres(db),
+		Post:          NewPostPostgres(db),
 	}
 }

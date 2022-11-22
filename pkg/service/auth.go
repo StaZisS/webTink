@@ -1,12 +1,13 @@
 package service
 
 import (
+	"crypto/sha1"
 	"encoding/base64"
 	"fmt"
 	"github.com/golang-jwt/jwt"
 	"github.com/google/uuid"
 	"github.com/spf13/viper"
-	"golang.org/x/crypto/bcrypt"
+	"os"
 	"time"
 	listing "web"
 	"web/pkg/repository"
@@ -58,8 +59,9 @@ func (s *AuthService) Refresh(cookie string) (string, error) {
 }
 
 func generatePasswordHash(password string) string {
-	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-	return string(hashedPassword)
+	hash := sha1.New()
+	hash.Write([]byte(password))
+	return fmt.Sprintf("%x", hash.Sum([]byte(os.Getenv("SALT"))))
 }
 
 func CreateToken(ttl time.Duration, userId uuid.UUID, privateKey string) (string, error) {

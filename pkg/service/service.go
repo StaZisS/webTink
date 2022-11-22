@@ -12,6 +12,9 @@ type Authorization interface {
 	Refresh(cookie string) (string, error)
 }
 type Post interface {
+	Create(userId uuid.UUID, post listing.Post) (uuid.UUID, error)
+	GetAll() ([]listing.Post, error)
+	GetById(id uuid.UUID) (listing.Post, error)
 }
 type Service struct {
 	Authorization
@@ -21,5 +24,6 @@ type Service struct {
 func NewService(repos *repository.Repository) *Service {
 	return &Service{
 		Authorization: NewAuthService(repos.Authorization),
+		Post:          NewPostService(repos.Post),
 	}
 }

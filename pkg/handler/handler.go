@@ -22,11 +22,14 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		auth.POST("/log-out", h.logOut)
 		auth.POST("/refresh", h.refresh)
 	}
-	api := router.Group("/api")
+	apiGuest := router.Group("/api-guest")
 	{
-		api.GET("/posts", h.getAllPosts)
-		api.GET("/posts/:id", h.getPostById)
-		api.POST("/posts", h.createPost)
+		apiGuest.GET("/posts", h.getAllPosts)
+		apiGuest.GET("/posts/:id", h.getPostById)
+	}
+	api := router.Group("/api", h.userIndentity)
+	{
+		api.POST("/create-posts", h.createPost)
 		api.PUT("/posts/:id", h.updatePost)
 		api.DELETE("/posts/:id", h.deletePost)
 	}

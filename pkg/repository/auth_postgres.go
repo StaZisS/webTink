@@ -21,14 +21,14 @@ func (r *AuthPostgres) CreateUser(user listing.User) (uuid.UUID, error) {
 	query := fmt.Sprintf("INSERT INTO %s (name, surname, username, email, grade, password, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id", usersTable)
 	row := r.db.QueryRow(query, user.Name, user.Surname, user.Username, user.Email, user.Grade, user.Password, time.Now())
 	if err := row.Scan(&id); err != nil {
-		return id, err
+		return uuid.Nil, err
 	}
 	return id, nil
 }
 
 func (r *AuthPostgres) GetUser(email, password string) (listing.User, error) {
 	var user listing.User
-	query := fmt.Sprintf("SELECT id FROM %s WHERE username = $1 AND password = $2", usersTable)
+	query := fmt.Sprintf("SELECT id FROM %s WHERE email = $1 AND password = $2", usersTable)
 	err := r.db.Get(&user, query, email, password)
 	return user, err
 }
