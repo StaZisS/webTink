@@ -47,7 +47,7 @@ func (h *Handler) signIn(c *gin.Context) {
 	c.SetCookie("logged_in", "true", viper.GetInt("ACCESS_TOKEN_MAXAGE")*60, "/", "localhost", false, false)
 
 	c.JSON(http.StatusOK, map[string]interface{}{
-		"token":         accessToken,
+		"access_token":  accessToken,
 		"refresh_token": refreshToken,
 	})
 }

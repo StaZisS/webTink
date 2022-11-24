@@ -25,3 +25,11 @@ func (s *PostService) GetAll() ([]listing.Post, error) {
 func (s *PostService) GetById(id uuid.UUID) (listing.Post, error) {
 	return s.repo.GetById(id)
 }
+
+func (s *PostService) Delete(idUser, idPost uuid.UUID) error {
+	return s.repo.Delete(idUser, idPost)
+}
+
+func (s *PostService) Update(idUser, idPost uuid.UUID, input listing.UpdatePostInput) error {
+	return s.repo.Update(idUser, idPost, input)
+}

@@ -4,6 +4,7 @@ import (
 	"crypto/sha1"
 	"encoding/base64"
 	"fmt"
+	"github.com/go-playground/validator/v10"
 	"github.com/golang-jwt/jwt"
 	"github.com/google/uuid"
 	"github.com/spf13/viper"
@@ -22,6 +23,11 @@ func NewAuthService(repo repository.Authorization) *AuthService {
 }
 
 func (s *AuthService) CreateUser(user listing.User) (uuid.UUID, error) {
+	validate := validator.New()
+	err := validate.Struct(user)
+	if err != nil {
+		return uuid.Nil, fmt.Errorf("validate: %w", err)
+	}
 	user.Password = generatePasswordHash(user.Password)
 	return s.repo.CreateUser(user)
 }

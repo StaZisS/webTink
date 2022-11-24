@@ -15,6 +15,8 @@ type Post interface {
 	Create(userId uuid.UUID, post listing.Post) (uuid.UUID, error)
 	GetAll() ([]listing.Post, error)
 	GetById(id uuid.UUID) (listing.Post, error)
+	Delete(idUser, idPost uuid.UUID) error
+	Update(idUser, idPost uuid.UUID, input listing.UpdatePostInput) error
 }
 type Repository struct {
 	Authorization

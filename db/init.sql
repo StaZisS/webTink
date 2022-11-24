@@ -19,13 +19,16 @@ CREATE UNIQUE INDEX "users_email_key" ON "users" ("email");
 CREATE UNIQUE INDEX "users_username_key" ON "users" ("username");
 CREATE TABLE "posts"(
                             "id" UUID NOT NULL DEFAULT (uuid_generate_v4()),
-                            "title" VARCHAR NOT NULL,
-                            "content" VARCHAR NOT NULL,
                             "author_id" UUID NOT NULL,
+                            "name" VARCHAR NOT NULL,
+                            "surname" VARCHAR NOT NULL,
+                            "role" VARCHAR NOT NULL,
+                            "education" VARCHAR NOT NULL,
+                            "additional" VARCHAR NOT NULL,
                             "photo" VARCHAR NOT NULL,
                             "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
                             "updated_at" TIMESTAMP(3) NOT NULL,
-
                             CONSTRAINT "posts_pkey" PRIMARY KEY ("id"),
                             CONSTRAINT "posts_author_id_fkey" FOREIGN KEY ("author_id") REFERENCES "users" ("id") ON DELETE CASCADE
 );
+CREATE UNIQUE INDEX "post_author_id_key" ON "posts" ("author_id");
