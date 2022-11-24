@@ -6,6 +6,7 @@ import (
 	"github.com/google/uuid"
 	"net/http"
 	"os"
+	"strings"
 	listing "web"
 )
 
@@ -20,7 +21,7 @@ func (h *Handler) getAllPosts(c *gin.Context) {
 		return
 	}
 	for i := range lists {
-		file, err := os.Open("images/" + lists[i].ID.String() + ".txt")
+		file, err := os.Open("../images/" + lists[i].ID.String() + ".txt")
 		if err != nil {
 			newErrorResponse(c, http.StatusInternalServerError, err.Error())
 			return
@@ -28,6 +29,7 @@ func (h *Handler) getAllPosts(c *gin.Context) {
 		defer file.Close()
 		reader := bufio.NewReader(file)
 		lists[i].Photo, err = reader.ReadString('\n')
+		lists[i].Photo = strings.Trim(lists[i].Photo, "\n")
 		if err != nil {
 			newErrorResponse(c, http.StatusInternalServerError, err.Error())
 			return
@@ -48,7 +50,7 @@ func (h *Handler) getPostById(c *gin.Context) {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
-	file, err := os.Open("images/" + list.ID.String() + ".txt")
+	file, err := os.Open("../images/" + list.ID.String() + ".txt")
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
@@ -56,6 +58,7 @@ func (h *Handler) getPostById(c *gin.Context) {
 	defer file.Close()
 	reader := bufio.NewReader(file)
 	list.Photo, err = reader.ReadString('\n')
+	list.Photo = strings.Trim(list.Photo, "\n")
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
@@ -77,7 +80,7 @@ func (h *Handler) createPost(c *gin.Context) {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
-	file, err := os.Create("images/" + id.String() + ".txt")
+	file, err := os.Create("../images/" + id.String() + ".txt")
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
@@ -108,7 +111,11 @@ func (h *Handler) updatePost(c *gin.Context) {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
-	file, err := os.Create("images/" + id.String() + ".txt")
+	if err := os.Remove("../images/" + id.String() + ".txt"); err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	file, err := os.Create("../images/" + id.String() + ".txt")
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
@@ -129,7 +136,7 @@ func (h *Handler) deletePost(c *gin.Context) {
 		newErrorResponse(c, http.StatusBadRequest, "invalid post id param")
 		return
 	}
-	if err := os.Remove("images/" + id.String() + ".txt"); err != nil {
+	if err := os.Remove("../images/" + id.String() + ".txt"); err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}

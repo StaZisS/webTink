@@ -2,7 +2,7 @@ port : "8000"
 db.host : "localhost"
 db.port : "5432"
 db.username : "postgres"
-db.name : "testnodejs"
+db.name : "postgres"
 db.sslmode : "disable"
 jwt.expires : 24
 jwt.secret: "secret"

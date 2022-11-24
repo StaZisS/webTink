@@ -20,7 +20,7 @@ func main() {
 	if err := initConfig(); err != nil {
 		logrus.Fatalf("error initializing configs: %s", err.Error())
 	}
-	if err := godotenv.Load(); err != nil {
+	if err := godotenv.Load("../.env"); err != nil {
 		logrus.Fatalf("error loading env variables: %s", err.Error())
 	}
 	db, err := repository.NewPostgresDB(repository.Config{
@@ -59,7 +59,8 @@ func main() {
 }
 
 func initConfig() error {
-	viper.AddConfigPath("configs")
 	viper.SetConfigName("config")
+	viper.SetConfigType("yaml")
+	viper.AddConfigPath("../configs")
 	return viper.ReadInConfig()
 }
