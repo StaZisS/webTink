@@ -18,14 +18,19 @@ type Post interface {
 	Delete(idUser, idPost uuid.UUID) error
 	Update(idUser, idPost uuid.UUID, input listing.UpdatePostInput) error
 }
+type Email interface {
+	SendEmail(email listing.Email) error
+}
 type Repository struct {
 	Authorization
 	Post
+	Email
 }
 
 func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
 		Authorization: NewAuthPostgres(db),
 		Post:          NewPostPostgres(db),
+		Email:         NewEmailPostgres(db),
 	}
 }

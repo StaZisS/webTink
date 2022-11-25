@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	 <link rel="stylesheet" href="style_message.css"/>
+	<title>
+		TeamXd message
+	</title>
+	<style>
+		html,body {
+    	margin: 0px auto;
+    	display: block;
+   		font-family: "Montserrat", sans-serif;
+    	font-size: 20px;
+	}
+	.main_container{
+	padding-left: 20%%;
+	width: 60%%;
+	}
+	.TeamXd{
+		text-align: center;
+		font-size: 46px;
+	}
+
+	.block_msg{
+	background-color: #eeeeee;
+	border-radius: 10px;
+	}
+	.h2_text{
+		padding-top: 15px;
+
+		margin-left: 5%%;
+	}
+	.msg{
+		padding-bottom: 15px;
+		margin-left: 5%%;
+	}
+
+	</style>
+</head>
+<body>
+<div class="main_container">
+	<div class="header_container">
+		<h1 class="TeamXd">Team Xd</p>
+	</div>
+	<div class="shead">
+		<h3 class="main">Привет %s!<h3>
+		<p class="text">Недавно ты отправлял нам заявку на вступление в команду, скоро мы с вами свяжемся с тобой по этому вопросу.</p>
+	</div>
+
+	<div class="block_msg">
+		<h2 class="h2_text">Твое сообщение:</h2>
+			<div class="msg">
+				<p class="text">%s<p>
+			</div>
+	</div>
+</div>
+
+</body>
+</html>
