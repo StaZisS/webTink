@@ -8,7 +8,7 @@ import (
 
 func (h *Handler) sendMail(c *gin.Context) {
 	var input listing.Email
-	if err := c.BindJSON(&input); err != nil {
+	if err := c.ShouldBind(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
