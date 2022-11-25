@@ -18,11 +18,11 @@ func (s *PostService) Create(userId uuid.UUID, post listing.Post) (uuid.UUID, er
 	return s.repo.Create(userId, post)
 }
 
-func (s *PostService) GetAll() ([]listing.Post, error) {
+func (s *PostService) GetAll() ([]listing.PostSend, error) {
 	return s.repo.GetAll()
 }
 
-func (s *PostService) GetById(id uuid.UUID) (listing.Post, error) {
+func (s *PostService) GetById(id uuid.UUID) (listing.PostSend, error) {
 	return s.repo.GetById(id)
 }
 

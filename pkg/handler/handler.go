@@ -26,6 +26,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	{
 		apiGuest.GET("/posts", h.getAllPosts)
 		apiGuest.GET("/posts/:id", h.getPostById)
+		apiGuest.GET("/post/photo/:id", h.getPostPhotoById)
 	}
 	api := router.Group("/api", h.userIndentity)
 	{

@@ -11,7 +11,7 @@ import (
 )
 
 type getAllPostsResponse struct {
-	Data []listing.Post `json:"data"`
+	Data []listing.PostSend `json:"data"`
 }
 
 func (h *Handler) getAllPosts(c *gin.Context) {
@@ -19,21 +19,6 @@ func (h *Handler) getAllPosts(c *gin.Context) {
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
-	}
-	for i := range lists {
-		file, err := os.Open("../images/" + lists[i].ID.String() + ".txt")
-		if err != nil {
-			newErrorResponse(c, http.StatusInternalServerError, err.Error())
-			return
-		}
-		defer file.Close()
-		reader := bufio.NewReader(file)
-		lists[i].Photo, err = reader.ReadString('\n')
-		lists[i].Photo = strings.Trim(lists[i].Photo, "\n")
-		if err != nil {
-			newErrorResponse(c, http.StatusInternalServerError, err.Error())
-			return
-		}
 	}
 	c.JSON(http.StatusOK, getAllPostsResponse{
 		Data: lists,
@@ -46,19 +31,6 @@ func (h *Handler) getPostById(c *gin.Context) {
 		return
 	}
 	list, err := h.services.Post.GetById(id)
-	if err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, err.Error())
-		return
-	}
-	file, err := os.Open("../images/" + list.ID.String() + ".txt")
-	if err != nil {
-		newErrorResponse(c, http.StatusInternalServerError, err.Error())
-		return
-	}
-	defer file.Close()
-	reader := bufio.NewReader(file)
-	list.Photo, err = reader.ReadString('\n')
-	list.Photo = strings.Trim(list.Photo, "\n")
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
@@ -147,5 +119,29 @@ func (h *Handler) deletePost(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, map[string]interface{}{
 		"Status": "ok",
+	})
+}
+func (h *Handler) getPostPhotoById(c *gin.Context) {
+	id, err := uuid.Parse(c.Param("id"))
+	if err != nil {
+		newErrorResponse(c, http.StatusBadRequest, "invalid post id param")
+		return
+	}
+	file, err := os.Open("../images/" + id.String() + ".txt")
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	defer file.Close()
+	var photo string
+	reader := bufio.NewReader(file)
+	photo, err = reader.ReadString('\n')
+	photo = strings.Trim(photo, "\n")
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"photo": photo,
 	})
 }

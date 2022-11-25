@@ -25,7 +25,6 @@ CREATE TABLE "posts"(
                             "role" VARCHAR NOT NULL,
                             "education" VARCHAR NOT NULL,
                             "additional" VARCHAR NOT NULL,
-                            "photo" VARCHAR NOT NULL,
                             "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
                             "updated_at" TIMESTAMP(3) NOT NULL,
                             CONSTRAINT "posts_pkey" PRIMARY KEY ("id"),
